@@ -431,6 +431,7 @@ html{scroll-behavior:smooth;scroll-padding-top:90px}
 .mobile-menu-toggle{display:none}@media(max-width:900px){.navin{position:relative;flex-wrap:wrap}.mobile-menu-toggle{display:block;margin-left:auto;padding:11px 15px;background:#222;color:#fff;border:1px solid #555;border-radius:8px;font:inherit;font-size:13px;cursor:pointer}.navlinks{display:none!important;width:100%;flex-basis:100%;padding:12px 0 16px;gap:0!important}.navlinks.is-open{display:flex!important;flex-direction:column;align-items:stretch!important}.navlinks a{display:block;padding:13px 12px;border-bottom:1px solid #333;font-size:14px}.navlinks .navcta{margin-top:10px;text-align:center;border:0}.nav{max-height:90vh;overflow-y:auto}}
 @media(max-width:900px){#mainNavLinks.is-open a,#mainNavLinks.is-open a:not(.navcta){display:block!important;visibility:visible!important}.mobile-menu-toggle{visibility:visible!important}}
 .cut-comparison{margin:0 0 30px;padding:25px;background:#181818;border:1px solid #383838;border-radius:18px}.cut-comparison h3{font-size:23px;margin:12px 0 20px}.cut-example-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.cut-example{font:inherit;text-align:left;cursor:pointer;border:1px solid #444;border-radius:14px;padding:20px;color:white;background:#202020}.cut-example:hover,.cut-example:focus-visible{border-color:var(--yellow)}.cut-demo{height:200px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse,#44443b,#252525);border-radius:10px;margin-bottom:18px}.backing-square{width:155px;height:170px;background:white;padding:14px;transform:rotate(-8deg);box-shadow:6px 8px 10px #0007}.backing-square img{width:100%;height:100%;object-fit:contain}.backing-contour{width:155px;height:170px;transform:rotate(-8deg);filter:drop-shadow(6px 8px 5px #0008)}.backing-contour img{width:100%;height:100%;object-fit:contain}.cut-example strong{font-size:18px}.cut-example p{font-size:13px;line-height:1.6;color:#bbb}.cut-example small{font-size:11px;line-height:1.5;color:var(--yellow);display:block}@media(max-width:600px){.cut-example-grid{grid-template-columns:1fr}.cut-comparison{padding:17px}.cut-demo{height:180px}}
+.delivery-box{margin-top:20px;padding:16px;border:1px solid #383838;border-radius:12px}.delivery-box>label{font-size:13px}.delivery-box select{display:block;width:100%;box-sizing:border-box;background:#252525;color:white;padding:12px;border:1px solid #444;border-radius:8px;margin-top:10px}.shipping-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.shipping-grid label{font-size:12px}.shipping-grid input{display:block;width:100%!important;min-width:0;box-sizing:border-box;padding:12px!important;margin-top:6px;background:#252525;color:white;border:1px solid #444;border-radius:7px}.delivery-box p{font-size:11px;color:#aaa;line-height:1.6}#shippingStatus{color:var(--yellow)}@media(max-width:600px){.shipping-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -618,7 +619,7 @@ html{scroll-behavior:smooth;scroll-padding-top:90px}
 
           <div class="volume" id="volumeBadge">🎉 Precio especial por volumen aplicado desde 6 pliegos.</div>
 
-          <div class="coupon-box"><label for="couponCode">¿Tienes un código de descuento?</label><div class="coupon-entry"><input id="couponCode" placeholder="Ej. BIENVENIDO10" maxlength="30" autocomplete="off"><button type="button" class="btn btn-dark" id="applyCoupon">Aplicar</button></div><p id="couponStatus" role="status" aria-live="polite"></p><small>Los códigos no aplican a la promoción de $120.000. No reducen gastos de envío.</small></div>
+          <div class="delivery-box"><label for="deliveryMethod">¿Cómo quieres recibir tu pedido?</label><select id="deliveryMethod"><option value="pickup">Recoger el pedido</option><option value="shipping">Envío a domicilio</option></select><div id="shippingFields" hidden><h4>Datos para envío</h4><div class="shipping-grid"><label for="shipName">Nombre<input id="shipName" autocomplete="shipping name" maxlength="120"></label><label for="shipId">Cédula<input id="shipId" inputmode="numeric" maxlength="30"></label><label for="shipPhone">Celular<input id="shipPhone" type="tel" autocomplete="shipping tel" maxlength="30"></label><label for="shipCity">Ciudad<input id="shipCity" autocomplete="shipping address-level2" maxlength="100"></label><label for="shipNeighborhood">Barrio<input id="shipNeighborhood" maxlength="100"></label><label for="shipAddress">Dirección<input id="shipAddress" autocomplete="shipping street-address" maxlength="220"></label></div><p>El costo del envío se confirma por WhatsApp y no está incluido en la cotización.</p></div><p id="shippingStatus" role="status" aria-live="polite"></p></div><div class="coupon-box"><label for="couponCode">¿Tienes un código de descuento?</label><div class="coupon-entry"><input id="couponCode" placeholder="Ej. BIENVENIDO10" maxlength="30" autocomplete="off"><button type="button" class="btn btn-dark" id="applyCoupon">Aplicar</button></div><p id="couponStatus" role="status" aria-live="polite"></p><small>Los códigos no aplican a la promoción de $120.000. No reducen gastos de envío.</small></div>
 <div class="quote-actions">
             <button id="whatsapp" class="btn btn-yellow">CONTINUAR POR WHATSAPP →</button>
             <button class="btn btn-dark" onclick="recalc()">Recalcular</button>
@@ -788,6 +789,7 @@ document.querySelectorAll('#w,#h,#vinyl,#laminate,input[name="cut"],input[name="
 
 document.getElementById('whatsapp').addEventListener('click',()=>{
   const r=recalc();
+  const shippingText=shippingSummary();if(shippingText===null)return;
   const name=document.getElementById('name').value.trim()||'Cliente';
   const city=document.getElementById('city').value.trim()||'No indicada';
   const business=document.getElementById('business').value.trim();
@@ -801,6 +803,8 @@ Quiero continuar con la cotización ${code}.
 
 Cliente: ${name}
 ${business?`Negocio: ${business}\n`:''}Ciudad: ${city}
+
+${shippingText}
 
 Producto: Stickers empresariales
 Cantidad: ${r.qty.toLocaleString('es-CO')}
@@ -884,6 +888,10 @@ document.getElementById('backgroundMode').addEventListener('change',()=>{documen
 
 const cutExampleImage=new Image();cutExampleImage.onload=()=>{const canvas=document.createElement('canvas');canvas.width=cutExampleImage.width;canvas.height=cutExampleImage.height;const c=canvas.getContext('2d',{willReadFrequently:true});c.drawImage(cutExampleImage,0,0);const pixels=c.getImageData(0,0,canvas.width,canvas.height),d=pixels.data,w=canvas.width,h=canvas.height,seen=new Uint8Array(w*h),q=new Int32Array(w*h);let head=0,tail=0;function add(i){if(i<0||i>=w*h||seen[i])return;const j=i*4;if(d[j+3]<20||(d[j]>242&&d[j+1]>242&&d[j+2]>242)){seen[i]=1;q[tail++]=i;}}for(let x=0;x<w;x++){add(x);add((h-1)*w+x);}for(let y=0;y<h;y++){add(y*w);add(y*w+w-1);}while(head<tail){const i=q[head++],x=i%w;d[i*4+3]=0;if(x>0)add(i-1);if(x<w-1)add(i+1);add(i-w);add(i+w);}c.putImageData(pixels,0,0);const out=document.createElement('canvas');out.width=w+24;out.height=h+24;const o=out.getContext('2d');for(let a=0;a<Math.PI*2;a+=Math.PI/24)o.drawImage(canvas,12+Math.cos(a)*6,12+Math.sin(a)*6);o.globalCompositeOperation='source-in';o.fillStyle='white';o.fillRect(0,0,out.width,out.height);o.globalCompositeOperation='source-over';o.drawImage(canvas,12,12);document.getElementById('dieCutExample').src=out.toDataURL();};cutExampleImage.src=defaultArtwork;
 document.querySelectorAll('[data-cut-example]').forEach(button=>button.addEventListener('click',()=>{const radio=document.querySelector('input[name="cut"][value="'+button.dataset.cutExample+'"]');if(radio){radio.checked=true;recalc();document.getElementById('configurar').scrollIntoView({behavior:'smooth'});}}));
+
+const shippingIds=['shipName','shipId','shipPhone','shipCity','shipNeighborhood','shipAddress'];
+document.getElementById('deliveryMethod').addEventListener('change',e=>{const shipping=e.target.value==='shipping';document.getElementById('shippingFields').hidden=!shipping;shippingIds.forEach(id=>document.getElementById(id).required=shipping);document.getElementById('shippingStatus').textContent='';});
+function shippingSummary(){if(document.getElementById('deliveryMethod').value!=='shipping')return 'Entrega: recoger el pedido';const labels=['Nombre','Cédula','Celular','Ciudad','Barrio','Dirección'];for(let i=0;i<shippingIds.length;i++){const input=document.getElementById(shippingIds[i]);if(!input.value.trim()){document.getElementById('shippingStatus').textContent='Completa '+labels[i].toLowerCase()+' para continuar con el envío.';input.focus();return null;}}document.getElementById('shippingStatus').textContent='';return 'Datos para envío:\n'+shippingIds.map((id,i)=>labels[i]+': '+document.getElementById(id).value.trim()).join('\n')+'\nCosto de envío: por confirmar';}
 </script>
 </body>
 </html>
